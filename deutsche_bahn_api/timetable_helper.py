@@ -126,12 +126,17 @@ class TimetableHelper:
                         train_changes.arrival_status = changes.attrib["cs"]
                     
 
+
                 for message in changes:
                     new_message = Message()
-                    new_message.id = message.attrib["id"]
-                    new_message.code = message.attrib["c"]
-                    new_message.time = message.attrib["ts"]
-                    new_message.message = resolve_message_by_code(int(message.attrib["c"]))
+                    new_message.id = message.attrib.get("id", '?')
+                    new_message.code = message.attrib.get("c", '?')
+                    new_message.time = message.attrib.get("ts", '?')
+                    try:
+                        new_message.message = resolve_message_by_code(int(message.attrib["c"]))
+                    except:
+                        print(message)
+                        new_message.message = '??'
                     train_changes.messages.append(new_message)
 
             found_train.train_changes = train_changes
